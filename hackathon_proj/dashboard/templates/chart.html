@@ -1,0 +1,137 @@
+{% extends 'base.html'%}
+
+{%block scripts%}
+
+
+
+
+<script>
+
+
+
+// jquery function
+$(document).ready(function(){
+    roomcount = document.getElementById('count').innerHTML;
+    
+
+    room_label_array = []
+    room_cost_array = []
+    
+    for (i=0;  i < roomcount; i++) {
+        roomid = document.getElementById(`${i+1}roomid`).innerHTML
+        room_label = document.getElementById(`${i+1}${roomid}label`).innerHTML
+        no_funitures = document.getElementById(`${i+1}${roomid}funiturecount`).innerHTML
+        
+        room_label_array.push(room_label)
+        
+      
+        total = 0
+        //labels
+        for (j =0; j < no_funitures; j++) {
+            funiture_price = document.getElementById(`${j+1}${roomid}objectprice`).innerHTML
+            funiture_count = document.getElementById(`${j+1}${roomid}objectcount`).innerHTML
+
+           
+            total += funiture_price * funiture_count
+
+    }       
+        room_cost_array.push(total)
+        
+    }
+   
+    
+
+    room_cost_array.push(0) 
+
+    total_cost = 0
+
+    for (b = 0; b < room_cost_array.length ; b++) {
+        total_cost += room_cost_array[b]
+        
+    }
+
+    
+  
+   
+    
+
+
+    document.getElementById('totalbudget').innerHTML = "Total Cost: $" + total_cost.toFixed(2);
+
+    var ctx = document.getElementById(`myChart`).getContext('2d');
+    var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: room_label_array,
+        datasets: [{
+            label: "Estimate cost of room in ($)",
+            data: room_cost_array,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+ 
+  
+    
+
+
+
+    });
+</script>
+{%endblock scripts%}
+
+{%block content%}
+
+<!-- displaying the chart -->
+<!-- you can also play around with the width and height to increase or decrease the chart size -->
+<div class="alert alert-primary">
+    <a href="{% url 'dashboard:add-rooms' %}">Add Rooms</a>
+    <a href="{% url 'dashboard:dashboard-page' %}" style="margin-left: 10px;">Dashboard</a>
+   
+    <a href="{% url 'account_logout' %}" style="margin-left: 10px;">Sign Out</a>
+</div>
+<canvas id="myChart" width="400" height="100"></canvas>  
+<canvas id="myChart2" width="400" height="100"></canvas>  
+
+<div id="totalbudget"></div>
+
+<div id="count" hidden>{{ rooms.count }}</div>
+{% for r in rooms %}
+<div id= "{{forloop.counter}}roomid" hidden>{{ r.id }}</div>
+<div id="{{forloop.counter}}{{ r.id }}label" hidden >{{ r.get_room_type_display }}</div>
+<div id="{{forloop.counter}}{{r.id}}funiturecount" hidden>{{ r.funiture_count }}</div>
+
+
+{% for f in r.funiture_set.all  %}
+
+<div id="{{forloop.counter}}{{ r.id }}funiture" hidden>{{ f.object_name }}</div>
+<div id="{{forloop.counter}}{{ r.id }}objectcount" hidden>{{ f.object_count }}</div>
+<div id="{{forloop.counter}}{{ r.id }}objectprice" hidden>{{ f.object_price }}</div>
+
+{% endfor %}
+
+{% endfor %}
+{%endblock content%}

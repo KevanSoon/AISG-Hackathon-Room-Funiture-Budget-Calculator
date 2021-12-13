@@ -1,0 +1,110 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<div class="alert alert-primary">
+    <a href="{% url 'dashboard:add-rooms' %}">Add Rooms</a>
+    <a href="{% url 'dashboard:dashboard-page' %}" style="margin-left: 10px;">Dashboard</a>
+    
+    <a href="{% url 'account_logout' %}" style="margin-left: 10px;">Sign Out</a>
+</div>
+
+
+{% if error_message %}
+<div class="alert alert-danger">{{ error_message }}</div>
+{% endif %}
+
+
+<!-- <div class="container">
+    <div class="col-sm-6">
+        <div class="col-sm-12 "> -->
+           
+        <div class="card" style="width: 25rem; margin-left: 10px; margin-bottom: 10px; ">
+            
+            <div class="card-body">
+            <h3 class="card-title">Add Room Form</h3>
+            <form method="POST" class="col-sm-4"  enctype="multipart/form-data" action="{% url 'dashboard:add-rooms' %}">
+                {% csrf_token %}
+                <label for="id_theme">Room theme:</label>
+                
+                <select name="theme" id="id_theme">
+                  <option value="French">French</option>
+                
+                  <option value="Japanese" selected="">Japanese</option>
+                
+                </select>
+
+                <label for="id_room_type" style="margin-top: 5px;">Room type:</label>
+                
+                <select name="room_type" class="" id="id_room_type">
+                    <option value="LR" selected="">Living Room</option>
+                    
+                    <option value="KC">Kitchen</option>
+                    
+                    <option value="R">Room</option>
+                    
+                    </select>
+                    
+                    
+                    <label for="id_room_image" style="margin-top: 5px;">Room image:</label>
+                    
+                    <input type="file" name="room_image" id="id_room_image">
+                   
+                <button class="btn btn-primary" style="margin-top: 10px;">Submit</button>
+        </form>
+              
+         </div>
+    </div>
+
+    <h2 style="margin-left: 10px;">Current Rooms</h2>
+    <a href="{% url 'dashboard:exe-rpa' %}" class="btn btn-primary" style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">Get Estimated Prices Online!</a>
+    
+    <div class="row">
+
+    {% for r in rooms %}
+    <div class="card" style="width: 25rem; margin-left: 20px;">
+        <div class="card-body">
+          <h3 class="card-title">{{r.get_room_type_display }}</h3>
+          
+          <img src="{{ r.image.url }}" style="width: 20rem; margin-bottom: 10px;" />
+          <a class="btn btn-primary"  href="{% url 'dashboard:image-edit' r.id %}" style="margin-bottom: 20px;">Update Room Image</a>
+
+         
+          
+          {% for f in r.funiture_set.all %}
+          <div>Funiture: {{ f.object_name}} </div>
+          
+          
+          <div>Qty: {{ f.object_count}}</div>
+          
+          
+          <div>Price Per: ${{ f.object_price }}</div>
+        
+          
+          <a class="btn btn-primary"  href="{% url 'dashboard:price-edit' f.id %}">Update Price</a>
+         
+          <br>
+          <br>
+          
+          {% endfor %}
+  
+            </div>
+            </div>
+
+
+          {% endfor %}
+        </div>
+        </div>
+      </div>
+
+        
+
+
+        <!-- </div>
+      
+    </div>
+</div> -->
+
+
+
+{% endblock content %}

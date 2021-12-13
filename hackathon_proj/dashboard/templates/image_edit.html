@@ -1,0 +1,20 @@
+{% extends 'base.html'%}
+
+{% block content %}
+    <div class="card" style="width: 25rem; margin-left: 10px; margin-bottom: 10px;">
+            
+        <div class="card-body">
+        <h3 class="card-title">Update Room Image Form</h3>
+        <form method="POST" enctype="multipart/form-data"> <!--enctype needed to handle images-->
+            {% csrf_token %}
+            {{ form }}
+            <div class="d-grid gap-2">
+            <br>
+            <button class="btn btn-success">Update!</button>
+            </div>
+        </form>
+        
+        </div>
+        </div>
+
+{% endblock content %}

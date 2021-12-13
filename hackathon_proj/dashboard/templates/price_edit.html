@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<div class="card" style="width: 25rem; margin-left: 10px; margin-bottom: 10px; ">
+            
+    <div class="card-body">
+    <h3 class="card-title">Edit Price Form</h3>
+    <form method="POST" enctype="multipart/form-data"> <!--enctype needed to handle images-->
+    {% csrf_token %}
+    <textarea name="object_price" cols="10" rows="2" required="" class="form-control mb-2" id="id_object_price">{{f.object_price}}</textarea>
+    <div class="d-grid gap-2">
+    <button class="btn btn-success mt-3">Update!</button>
+    </div>
+</form>
+
+</div>
+</div>
+{% endblock content %}
